@@ -24,7 +24,10 @@ CookieStorage.prototype.getCookieValue = function (name) {
     var self = this;
     return new Promise(function(resolve, reject) {
         self.storage.findCookie(CONSTANTS.HOSTNAME, '/', name, function(err, cookie) {
+            console.log(err);
             if (err) return reject(err);
+            console.log(_.isObject(cookie));
+            console.log(cookie);
             if (!_.isObject(cookie)) return reject(new Exceptions.CookieNotValidError(name));
             resolve(cookie);
         })
@@ -68,10 +71,17 @@ CookieStorage.prototype.getAccountId = function () {
 
 CookieStorage.prototype.getSessionId = function () {
     var currentTime = new Date().getTime();
+    console.log("getSessionId");
     return this.getCookieValue('sessionid')
         .then(function(cookie) {
+            console.log("cookie");
+            console.log(cookie);
             var acceptable = cookie.expires instanceof Date && cookie.expires.getTime() > currentTime;
-            if(acceptable) return cookie.value;
+            if(acceptable) {
+                console.log("cookie.value");
+                console.log(cookie.value);
+                return cookie.value;
+            }
             throw new Exceptions.CookieNotValidError("sessionid"); 
         })
 };

@@ -31,10 +31,10 @@ InstagramV1.discover = require('./v1/discover');
 InstagramV1.Save = require('./v1/save');
 InstagramV1.search = require('./v1/search');
 
-var creator = require('./v1/account-creator');
-InstagramV1.AccountCreator = creator.AccountCreator;
-InstagramV1.AccountPhoneCreator = creator.AccountPhoneCreator;
-InstagramV1.AccountEmailCreator = creator.AccountEmailCreator;
+// var creator = require('./v1/account-creator');
+// InstagramV1.AccountCreator = creator.AccountCreator;
+// InstagramV1.AccountPhoneCreator = creator.AccountPhoneCreator;
+// InstagramV1.AccountEmailCreator = creator.AccountEmailCreator;
 
 InstagramV1.Feed = {};
 InstagramV1.Feed.AccountFollowers = require('./v1/feeds/account-followers');

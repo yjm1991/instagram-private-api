@@ -74,17 +74,17 @@ ThreadItem.prototype.parseParams = function (json) {
 
 ThreadItem.prototype.getParams = function() {
     var params = _.clone(this._params);
-    if(params.type == 'link')
+    if(params.type === 'link')
         params.link = this.link.params;
-    if(params.type == 'placeholder')
+    if(params.type === 'placeholder')
         params.placeholder = this.placeholder.params;
-    if(params.type == 'mediaShare')
+    if(params.type === 'mediaShare')
         params.mediaShare = this.mediaShare.params;
-    if(params.type == 'profile')
+    if(params.type === 'profile')
         params.profile = this.profile.params;
-    if(params.type == 'location')
+    if(params.type === 'location')
         params.location = this.location.params;
-    if(params.type == 'hashtag')
+    if(params.type === 'hashtag')
         params.hashtag = this.hashtag.params;
     return params;
 }

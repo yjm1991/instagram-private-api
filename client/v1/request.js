@@ -199,6 +199,7 @@ Request.prototype.setUrl = function(url) {
 Request.prototype.setResource = function(resource, data) {
     this._resource = resource;
     this.setUrl(routes.getUrl(resource, data));
+    // console.log("setResource:" + routes.getUrl(resource, data));
     return this;
 };
 
@@ -349,9 +350,13 @@ Request.prototype.send = function (options, attemps) {
     if (!attemps) attemps = 0;
     return this._mergeOptions(options)
         .then(function(opts) {
-            return [opts, that._prepareData()];    
+            // console.log("opts");
+            // console.log(opts);
+            return [opts, that._prepareData()];
         })
         .spread(function(opts, data){
+            // console.log("data:");
+            // console.log(data);
             opts = _.defaults(opts, data);
             return that._transform(opts);
         })
@@ -363,13 +368,16 @@ Request.prototype.send = function (options, attemps) {
         .then(_.bind(this.parseMiddleware, this))
         .then(function (response) {
             var json = response.body;
-            if (_.isObject(json) && json.status == "ok")
+            // console.log("response:");
+            // console.log(_.omit(response.body, 'status'));
+            if (_.isObject(json) && json.status === "ok")
                 return _.omit(response.body, 'status');
             if (_.isString(json.message) && json.message.toLowerCase().indexOf('transcode timeout') !== -1)
                 throw new Exceptions.TranscodeTimeoutError();
             throw new Exceptions.RequestError(json);
         })
         .catch(function(error) {
+            console.log("error:" + error);
             return that.beforeError(error, options, attemps)
         })
         .catch(function (err) {
@@ -378,7 +386,7 @@ Request.prototype.send = function (options, attemps) {
             if(!err || !err.response)
                 throw err;    
             var response = err.response;
-            if (response.statusCode == 404)
+            if (response.statusCode === 404)
                 throw new Exceptions.NotFoundError(response);
             if (response.statusCode >= 500) {
                 if (attemps <= that.attemps) {

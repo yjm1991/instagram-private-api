@@ -86,6 +86,7 @@ Session.prototype.setDevice = function (device) {
 
 
 Session.prototype.getAccountId = function() {
+    console.log("getAccountId");
     var that = this;
     return this._cookiesStore.getSessionId()
         .then(function () {
@@ -148,26 +149,26 @@ Session.login = function(session, username, password) {
         .then(function () {
             return [session, QE.sync(session)];
         })
-        .spread(function (session) {
-            var autocomplete = Relationship.autocompleteUserList(session)
-                .catch(Exceptions.RequestsLimitError, function() {
-                    // autocompleteUserList has ability to fail often
-                    return false;
-                })
-            return [session, autocomplete];
-        })
-        .spread(function (session) {
-            return [session, new Timeline(session).get()];
-        })
-        .spread(function (session) {
-            return [session, Thread.recentRecipients(session)];
-        })
-        .spread(function (session) {
-            return [session, new Inbox(session).get()];
-        })
-        .spread(function (session) {
-            return [session, Megaphone.logSeenMainFeed(session)];
-        })
+        // .spread(function (session) {
+        //     var autocomplete = Relationship.autocompleteUserList(session)
+        //         .catch(Exceptions.RequestsLimitError, function() {
+        //             // autocompleteUserList has ability to fail often
+        //             return false;
+        //         })
+        //     return [session, autocomplete];
+        // })
+        // .spread(function (session) {
+        //     return [session, new Timeline(session).get()];
+        // })
+        // .spread(function (session) {
+        //     return [session, Thread.recentRecipients(session)];
+        // })
+        // .spread(function (session) {
+        //     return [session, new Inbox(session).get()];
+        // })
+        // .spread(function (session) {
+        //     return [session, Megaphone.logSeenMainFeed(session)];
+        // })
         .spread(function(session) {
             return session;
         })
@@ -198,6 +199,7 @@ Session.create = function(device, storage, username, password, proxy) {
         })
         .catch(Exceptions.CookieNotValidError, function() {
             // We either not have valid cookes or authentication is not fain!
+            console.log("Session create cookie not valid, try login");
             return Session.login(session, username, password)
         })
 }
